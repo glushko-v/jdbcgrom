@@ -32,9 +32,17 @@ public class JDBCFirstStep {
             }
 
 
-            try (ResultSet rs = statement.executeQuery("SELECT * FROM TEST")) {
+            try (ResultSet rs = statement.executeQuery("SELECT * FROM ORDER1 WHERE PRICE < 150")) {
                 while (rs.next()) {
-                    System.out.println("Object found");
+                    long id = rs.getLong(1);
+                    String productName = rs.getString(2);
+                    int price = rs.getInt(3);
+                    Date dateOrdered = rs.getDate(4);
+                    Date dateConfirmed = rs.getDate(5);
+                    Order order = new Order(id, productName, price, dateOrdered, dateConfirmed);
+
+                    System.out.println(order);
+
                 }
 
             }
