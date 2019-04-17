@@ -39,6 +39,6 @@ public class JDBCExamples {
 
         Solution solution = new Solution();
 //
-       solution.getAllProducts();
+       solution.increasePrice();
     }
 }
