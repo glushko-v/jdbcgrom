@@ -178,35 +178,6 @@ public class Solution {
 
     }
 
-    public void increasePrice(){
 
-        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
-             Statement statement = connection.createStatement()) {
-
-
-            int response = statement.executeUpdate("update PRODUCT set PRICE = (PRICE + 100) where PRICE < 970 ");
-            System.out.println(response);
-
-
-
-
-
-
-        } catch (SQLException se) {
-            System.err.println("Something went wrong");
-            se.printStackTrace();
-
-
-        }
-
-
-    }
-
-    public void changeDescription(){
-
-        //1. получить поля где длина описания больше 100
-        //2. 
-
-    }
 
 }

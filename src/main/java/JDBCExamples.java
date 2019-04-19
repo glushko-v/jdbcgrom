@@ -37,8 +37,11 @@ public class JDBCExamples {
 
         }*/
 
-        Solution solution = new Solution();
-//
-       solution.increasePrice();
+        NewSolution solution = new NewSolution();
+
+        solution.changeDescription();
+
+
+
     }
 }
