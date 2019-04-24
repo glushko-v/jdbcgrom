@@ -1,8 +1,10 @@
 package DataExtract;
 
 
-
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Solution {
 
@@ -12,9 +14,10 @@ public class Solution {
     public static final String USER = "main";
     public static final String PASS = "test123456";
 
+    public List<Product> productList = new ArrayList<>();
 
-    public void getAllProducts() {
 
+    public List<Product> getAllProducts() {
 
 
         try (Connection connection = DriverManager.getConnection(Solution.DB_URL, USER, PASS);
@@ -31,8 +34,9 @@ public class Solution {
 
 
                 Product product = new Product(id, name, description, price);
+                productList.add(product);
 
-                System.out.println(product);
+
             }
 
 
@@ -43,9 +47,13 @@ public class Solution {
 
         }
 
+
+        return productList;
+
+
     }
 
-    public void getProductsByPrice() {
+    public List<Product> getProductsByPrice() {
 
         try (Connection connection = DriverManager.getConnection(Solution.DB_URL, USER, PASS);
              Statement statement = connection.createStatement()) {
@@ -61,8 +69,9 @@ public class Solution {
 
 
                 Product product = new Product(id, name, description, price);
+                productList.add(product);
 
-                System.out.println(product);
+
             }
 
 
@@ -73,9 +82,12 @@ public class Solution {
 
         }
 
+
+        return productList;
+
     }
 
-    public void getProductsByDescription(){
+    public List<Product> getProductsByDescription() {
 
         try (Connection connection = DriverManager.getConnection(Solution.DB_URL, USER, PASS);
              Statement statement = connection.createStatement()) {
@@ -84,7 +96,7 @@ public class Solution {
             ResultSet rs = statement.executeQuery("SELECT * FROM PRODUCT");
 
             while (rs.next()) {
-                if (rs.getString(3).length()> 50) {
+                if (rs.getString(3).length() > 50) {
                     long id = rs.getLong(1);
                     String name = rs.getString(2);
                     String description = rs.getString(3);
@@ -92,8 +104,8 @@ public class Solution {
 
 
                     Product product = new Product(id, name, description, price);
+                    productList.add(product);
 
-                    System.out.println(product);
 
                 }
             }
@@ -105,6 +117,9 @@ public class Solution {
 
 
         }
+
+        
+        return productList;
 
     }
 }

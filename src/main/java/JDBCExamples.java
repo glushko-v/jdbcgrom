@@ -1,4 +1,4 @@
-import SaveDelete.Solution;
+import DataExtract.Solution;
 
 public class JDBCExamples {
 
@@ -38,7 +38,7 @@ public class JDBCExamples {
         }*/
 
         Solution solution = new Solution();
-        solution.saveProduct();
+        solution.getProductsByDescription();
 
 
 
