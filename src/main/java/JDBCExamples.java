@@ -1,4 +1,4 @@
-import java.sql.*;
+import HomeWork1.NewSolution;
 
 public class JDBCExamples {
 

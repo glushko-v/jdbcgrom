@@ -1,3 +1,5 @@
+package HomeWork;
+
 import java.sql.*;
 
 
@@ -8,24 +10,10 @@ public class Solution {
     public static final String USER = "main";
     public static final String PASS = "test123456";
 
-    class Product {
-        private long id;
-        private String name;
-        private String description;
-        private int price;
 
-         Product(long id, String name, String description, int price) {
-            this.id = id;
-            this.name = name;
-            this.description = description;
-            this.price = price;
-        }
 
-        @Override
-        public String toString() {
-            return id + " " + name + " " + description + " " + price;
-        }
-    }
+
+
 
     public void saveProduct() {
 
@@ -49,7 +37,7 @@ public class Solution {
 
     public void deleteProducts() {
 
-        try (Connection connection = DriverManager.getConnection(JDBCFirstStep.DB_URL, USER, PASS);
+        try (Connection connection = DriverManager.getConnection(Solution.DB_URL, USER, PASS);
              Statement statement = connection.createStatement()) {
 
             int response = statement.executeUpdate("DELETE FROM PRODUCT WHERE NAME != 'toy'");
@@ -67,7 +55,7 @@ public class Solution {
 
     public void deleteProductsByPrice() {
 
-        try (Connection connection = DriverManager.getConnection(JDBCFirstStep.DB_URL, USER, PASS);
+        try (Connection connection = DriverManager.getConnection(Solution.DB_URL, USER, PASS);
              Statement statement = connection.createStatement()) {
 
             int response = statement.executeUpdate("DELETE FROM PRODUCT WHERE PRICE < 100");
@@ -87,7 +75,7 @@ public class Solution {
 
 
 
-        try (Connection connection = DriverManager.getConnection(JDBCFirstStep.DB_URL, USER, PASS);
+        try (Connection connection = DriverManager.getConnection(Solution.DB_URL, USER, PASS);
              Statement statement = connection.createStatement()) {
 
 
@@ -117,7 +105,7 @@ public class Solution {
 
     public void getProductsByPrice() {
 
-        try (Connection connection = DriverManager.getConnection(JDBCFirstStep.DB_URL, USER, PASS);
+        try (Connection connection = DriverManager.getConnection(Solution.DB_URL, USER, PASS);
              Statement statement = connection.createStatement()) {
 
 
@@ -147,7 +135,7 @@ public class Solution {
 
     public void getProductsByDescription(){
 
-        try (Connection connection = DriverManager.getConnection(JDBCFirstStep.DB_URL, USER, PASS);
+        try (Connection connection = DriverManager.getConnection(Solution.DB_URL, USER, PASS);
              Statement statement = connection.createStatement()) {
 
 

@@ -1,3 +1,5 @@
+package HomeWork1;
+
 import java.sql.*;
 
 public class NewSolution {
@@ -51,12 +53,15 @@ public class NewSolution {
     public void changeDescription() {
 
 
-        try (Connection connection = DriverManager.getConnection(JDBCFirstStep.DB_URL, USER, PASS);
+        try (Connection connection = DriverManager.getConnection(NewSolution.DB_URL, USER, PASS);
              Statement statement = connection.createStatement()) {
 
 
             int response = statement.executeUpdate("update product set description = replace (substr(description, 1, instr(description, '.', -1)), description) where length(description)>100 and instr(description, '.') > 0");
             System.out.println(response);
+
+
+
 
 
         } catch (SQLException se) {
