@@ -1,4 +1,4 @@
-import HomeWork1.NewSolution;
+import SaveDelete.Solution;
 
 public class JDBCExamples {
 
@@ -37,9 +37,8 @@ public class JDBCExamples {
 
         }*/
 
-        NewSolution solution = new NewSolution();
-
-        solution.changeDescription();
+        Solution solution = new Solution();
+        solution.saveProduct();
 
 
 

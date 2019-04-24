@@ -1,4 +1,4 @@
-package HomeWork;
+package DataExtract;
 
 public class Product {
 
