@@ -1,7 +1,5 @@
 package lesson3;
 
-import HomeWork_lesson_1_2.DataExtract.Solution;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
