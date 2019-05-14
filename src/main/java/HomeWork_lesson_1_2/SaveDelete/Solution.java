@@ -1,4 +1,4 @@
-package SaveDelete;
+package HomeWork_lesson_1_2.SaveDelete;
 
 import java.sql.*;
 

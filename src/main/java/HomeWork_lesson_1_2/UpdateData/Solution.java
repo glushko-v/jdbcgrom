@@ -1,4 +1,4 @@
-package UpdateData;
+package HomeWork_lesson_1_2.UpdateData;
 
 import java.sql.*;
 

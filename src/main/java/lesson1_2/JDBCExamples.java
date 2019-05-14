@@ -1,4 +1,6 @@
-import DataExtract.Solution;
+package lesson1_2;
+
+import HomeWork_lesson_1_2.DataExtract.Solution;
 
 public class JDBCExamples {
 

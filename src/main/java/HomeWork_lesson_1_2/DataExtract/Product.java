@@ -1,4 +1,4 @@
-package DataExtract;
+package HomeWork_lesson_1_2.DataExtract;
 
 public class Product {
 

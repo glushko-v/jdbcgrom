@@ -1,9 +1,8 @@
-package DataExtract;
+package HomeWork_lesson_1_2.DataExtract;
 
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Solution {
