@@ -7,7 +7,9 @@ public class Demo {
 
 //        solution.testDeletePerformance();
 //        solution.testSavePerformance();
-        solution.testSelectPerformance();
+//        solution.testSelectPerformance();
+//        solution.testSelectByIdPerformance();
+        solution.testDeleteByIdPerformance();
 
     }
 }
