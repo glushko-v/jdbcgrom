@@ -12,6 +12,10 @@ public class ProductDAO {
     public static final String USER = "main";
     public static final String PASS = "test123456";
 
+    private Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DB_URL, USER, PASS);
+    }
+
     public Product save(Product product) {
 
         try (Connection connection = getConnection();
@@ -122,8 +126,6 @@ public class ProductDAO {
 
     }
 
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, PASS);
-    }
+
 
 }
