@@ -29,5 +29,8 @@ public class Storage {
         return storageMaxSize;
     }
 
-
+    @Override
+    public String toString() {
+        return "Storage " + id + " " + storageCountry;
+    }
 }
