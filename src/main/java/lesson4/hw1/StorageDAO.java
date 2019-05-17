@@ -61,18 +61,17 @@ public class StorageDAO implements DAO<Storage> {
             ps.setLong(2, storage.getStorageMaxSize());
             ps.setLong(3, storage.getId());
 
-            int res = ps.executeUpdate();
-            System.out.println("Finished with result " + res);
+            idCheck(ps, storage.getId());
 
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return storage;
     }
 
-    @Override
+//    @Override
     public Storage findById(long id) {
 
         try (Connection conn = getConnection();

@@ -37,6 +37,10 @@ public class File {
         return storage;
     }
 
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
