@@ -1,13 +1,11 @@
 package lesson4.hw1;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 public class Controller {
 
-    private StorageDAO sd = new StorageDAO();
+
     private FileDAO fd = new FileDAO();
 
     public static final String DB_URL = "jdbc:oracle:thin:@gromcode.cfc1xaielreq.us-east-2.rds.amazonaws.com:1521:ORCL";
@@ -19,50 +17,136 @@ public class Controller {
     }
 
 
+    public File put(Storage storage, File file) throws Exception {
 
-    public File put(Storage storage, File file){
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement("UPDATE FILES SET STORAGE_ID = ? WHERE ID = ?")) {
+
+            conn.setAutoCommit(false);
+
+            if (checkStorageSize(storage, file) && !isFileInStorage(storage, file)) {
+
+                file.setStorage(storage);
+                ps.setLong(1, storage.getId());
+                ps.setLong(2, file.getId());
+                int res = ps.executeUpdate();
+
+                System.out.println("File " + file.getName() + "." + file.getFormat() + " successfully been put to storage " + storage.getId() + " with a result " + res);
+
+                conn.commit();
+            } else throw new Exception("Something wrong. Please check your file and storage");
 
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            getConnection().rollback();
+        }
+
+        System.out.println(file.toString());
+        return file;
+    }
+
+    public List<File> putAll(Storage storage, List<File> files) {
 
         return null;
     }
 
-    public List<File> putAll(Storage storage, List<File>files){
+    public void delete(Storage storage, File file) {
+
+        //1. удалить storage_id из БД
+        //2. storage = null для файла
+
+        file.setStorage(null);
+
+
+    }
+
+    public List<File> transferAll(Storage storageFrom, Storage storageTo) {
 
         return null;
     }
 
-    public void delete (Storage storage, File File){
+    public File transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
 
-
-
-
-    }
-
-    public List<File> transferAll(Storage storageFrom, Storage storageTo){
-
-        return null;
-    }
-
-    public File transferFile(Storage storageFrom, Storage storageTo, long id){
-
-        //1. достаем файл из БД используя findById+++
-        //2. точно также достаем storageFrom и storageTo+++
-        //3. Проверяем storageTo на вместимость
-        //4. меняем storage_id у файла в БД
-        //5. меняем поле storage у файла
-        //4 и 5 объединяем в одну транзакцию
 
         File file = fd.findById(id);
-        Storage storFrom = sd.findById(storageFrom.getId());
-        Storage storTo = sd.findById(storageTo.getId());
 
 
+        if (!checkStorageSize(storageTo, file))
+            throw new FileSizeException("Not enough space for file " + file.getName() + "." + file.getFormat() + " in storage " + storageTo.getId());
+        if (!isFileInStorage(storageFrom, file))
+            throw new Exception("There's no file " + file.getName() + "." + file.getFormat() + " in storage " + storageFrom.getId());
+        else {
+            fd.update(file);
+            file.setStorage(storageTo);
+
+        }
 
 
+        return file;
+    }
 
 
-        return null;
+    private boolean checkStorageSize(Storage storage, File file) throws Exception {
+
+        if (storage != null && file != null)
+            return ((storage.getStorageMaxSize() - getFilesSize(storage)) > file.getSize());
+        else if (storage == null) throw new Exception("There's no storage " + storage.getId());
+        else throw new Exception("Something wrong");
+    }
+
+    private long getFilesSize(Storage storage) {
+
+        long filesTotalSize = 0;
+
+
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement("select * from Files where storage_id = ?")) {
+
+            ps.setLong(1, storage.getId());
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                filesTotalSize += rs.getLong(4);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return filesTotalSize;
+    }
+
+    private boolean isFileInStorage(Storage storage, File file) throws SQLException {
+
+        long databaseID = 0;
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement("SELECT STORAGE_ID FROM FILES WHERE ID = ?")) {
+
+            conn.setAutoCommit(false);
+
+            ps.setLong(1, file.getId());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                databaseID = rs.getLong(1);
+            }
+
+            conn.commit();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            getConnection().rollback();
+        }
+
+
+        return (databaseID == storage.getId() && file.getStorage().getId() == storage.getId());
+
     }
 
 

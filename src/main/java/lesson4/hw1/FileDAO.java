@@ -19,8 +19,8 @@ public class FileDAO implements DAO<File> {
             ps.setString(2, file.getName());
             ps.setString(3, file.getFormat());
             ps.setLong(4, file.getSize());
-            ps.setLong(5, file.getStorage().getId());
-
+            if (file.getStorage() != null) ps.setLong(5, file.getStorage().getId());
+            else ps.setObject(5, null);
 
 
             int res = ps.executeUpdate();
@@ -53,27 +53,35 @@ public class FileDAO implements DAO<File> {
     }
 
     @Override
-    public File update(File file) {
+    public File update(File file) throws SQLException {
 
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement("update Files set fileName = ?, fileFormat = ?, fileSize = ?, storage_id = ? where id = ?")) {
 
+            conn.setAutoCommit(false);
+
             ps.setString(1, file.getName());
             ps.setString(2, file.getFormat());
             ps.setLong(3, file.getSize());
-            ps.setLong(4, file.getStorage().getId());
+            if(file.getStorage() != null)  ps.setLong(4, file.getStorage().getId());
+            else ps.setObject(4, null);
+            ps.setLong(5, file.getId());
+
 
             idCheck(ps, file.getId());
+
+            conn.commit();
 
 
         } catch (SQLException e) {
             e.printStackTrace();
+            getConnection().rollback();
         }
 
         return file;
     }
 
-//    @Override
+    @Override
     public File findById(long id) {
 
         try (Connection conn = getConnection();
@@ -91,7 +99,7 @@ public class FileDAO implements DAO<File> {
                 Storage storage = new Storage(rs.getLong(5), formats, rs.getString(7), rs.getLong(8));
                 File file = new File(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getLong(4), storage);
 
-                System.out.println(file.toString());
+
                 idCheck(ps, id);
                 return file;
 
@@ -112,6 +120,8 @@ public class FileDAO implements DAO<File> {
     private void idCheck(PreparedStatement ps, long id) throws SQLException {
         int res = ps.executeUpdate();
         if (res == 0) System.err.println("There's no ID " + id);
-        else System.out.println("Process finished with result " + res);
+
     }
+
+
 }
