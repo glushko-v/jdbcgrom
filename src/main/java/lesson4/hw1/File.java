@@ -58,6 +58,9 @@ public class File {
 
     @Override
     public String toString() {
-        return "id " + id + " " + name + "." + format + ", storage " + storage.getId();
+        if (storage != null) {
+            return "id " + id + " " + name + "." + format + ", storage " + storage.getId();
+        }
+        else return "id " + id + " " + name + "." + format + ", storage " + "null";
     }
 }

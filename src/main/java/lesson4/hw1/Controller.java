@@ -1,6 +1,7 @@
 package lesson4.hw1;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
@@ -47,17 +48,69 @@ public class Controller {
         return file;
     }
 
-    public List<File> putAll(Storage storage, List<File> files) {
+    public List<File> putAll(Storage storage, List<File> files) throws Exception {
 
-        return null;
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement("UPDATE FILES SET STORAGE_ID = ?")) {
+
+            conn.setAutoCommit(false);
+
+            ps.setLong(1, storage.getId());
+
+            if (checkFilesSize(files, storage)) {
+
+                int res = ps.executeUpdate();
+
+                for (File file : files) {
+                    if (!isFileInStorage(storage, file)) {
+                        file.setStorage(storage);
+                        System.out.println("File " + file.getName() + "." + file.getFormat() + " put to storage " + storage.getId());
+                    } else {
+                        throw new Exception("File " + file.getName() + "." + file.getFormat() + " is already in storage " + storage.getId() + ". Put failed");
+
+                    }
+                }
+
+
+                conn.commit();
+
+            } else conn.rollback();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            getConnection().rollback();
+        }
+
+
+        return files;
     }
 
-    public void delete(Storage storage, File file) {
+    public void delete(Storage storage, File file) throws Exception {
 
-        //1. удалить storage_id из БД
-        //2. storage = null для файла
 
-        file.setStorage(null);
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement("UPDATE FILES SET STORAGE_ID = ? WHERE ID = ?")) {
+
+            conn.setAutoCommit(false);
+
+            if (isFileInStorage(storage, file)) {
+
+                ps.setObject(1, null);
+                ps.setLong(2, file.getId());
+                file.setStorage(null);
+                int res = ps.executeUpdate();
+                conn.commit();
+                System.out.println("File " + file.getName() + "." + file.getFormat() + " deleted from storage " + storage.getId() + " with result " + res);
+                System.out.println(file.toString());
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            getConnection().rollback();
+        }
 
 
     }
@@ -120,7 +173,7 @@ public class Controller {
         return filesTotalSize;
     }
 
-    private boolean isFileInStorage(Storage storage, File file) throws SQLException {
+    private boolean isFileInStorage(Storage storage, File file) throws Exception {
 
         long databaseID = 0;
 
@@ -144,8 +197,32 @@ public class Controller {
             getConnection().rollback();
         }
 
+//        try {
+//            return (databaseID == storage.getId() && file.getStorage().getId() == storage.getId());
+//        } catch (NullPointerException e) {
+//            return false;
+//        }
 
-        return (databaseID == storage.getId() && file.getStorage().getId() == storage.getId());
+        if (storage == null) return false;
+        if (file == null) return false;
+
+        else return (databaseID == storage.getId() && file.getStorage().getId() == storage.getId());
+
+    }
+
+    public boolean checkFilesSize(List<File> files, Storage storage) throws Exception {
+
+        long filesTotalSize = 0;
+
+        for (File file : files) {
+            filesTotalSize += file.getSize();
+
+        }
+
+        if (storage != null)
+            return ((storage.getStorageMaxSize() - getFilesSize(storage) > filesTotalSize));
+        else throw new Exception("Something wrong");
+
 
     }
 
