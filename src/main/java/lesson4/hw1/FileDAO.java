@@ -84,20 +84,26 @@ public class FileDAO implements DAO<File> {
     @Override
     public File findById(long id) {
 
+        File file = null;
+
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement("select files.id, files.fileName, files.fileFormat, files.fileSize, storages.id,\n" +
                      "storages.formatsSupported, storages.storageCountry, storages.storageMaxSize\n" +
                      "from files\n" +
-                     "join storages on files.storage_id = storages.id")) {
+                     "join storages on files.storage_id = storages.id where files.id = ?")) {
 
 
+
+            ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
+
 
             while (rs.next()) {
 
+
                 String[] formats = rs.getString(6).split(",");
                 Storage storage = new Storage(rs.getLong(5), formats, rs.getString(7), rs.getLong(8));
-                File file = new File(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getLong(4), storage);
+                 file = new File(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getLong(4), storage);
 
 
                 idCheck(ps, id);
