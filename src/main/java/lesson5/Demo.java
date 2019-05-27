@@ -5,23 +5,19 @@ import org.hibernate.Session;
 public class Demo {
 
     public static void main(String[] args) {
-        Session session = new HibernateUtils().createSessionFactory().openSession();
 
-        session.getTransaction().begin();
 
         Product product = new Product();
         product.setId(99);
-        product.setName("table");
-        product.setDescription("grey & blue");
-        product.setPrice(70);
+        product.setName("folded table");
+        product.setDescription("black/blue/black");
+        product.setPrice(170);
 
-        session.save(product);
+        ProductRepository pr = new ProductRepository();
 
-        session.getTransaction().commit();
+        pr.delete(99);
 
-        System.out.println("Done");
 
-        session.close();
 
 
     }
