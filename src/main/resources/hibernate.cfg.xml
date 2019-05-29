@@ -10,6 +10,6 @@
         <property name="hibernate.connection.password">test123456</property>
 
 
-        <mapping class="lesson5.Product"></mapping>
+        <mapping class="hibernate.lesson1.Product"></mapping>
     </session-factory>
 </hibernate-configuration>
