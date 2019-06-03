@@ -20,7 +20,7 @@ public class ProductRepository {
 
     }
 
-    void delete(long id){
+    public void delete(long id){
 
         Session session = new HibernateUtils().createSessionFactory().openSession();
 
