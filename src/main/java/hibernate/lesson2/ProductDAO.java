@@ -7,6 +7,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import java.util.List;
 
 public class ProductDAO {
@@ -80,6 +83,7 @@ public class ProductDAO {
             session = createSessionFactory().openSession();
             tr = session.getTransaction();
             tr.begin();
+            
             session.update(product);
             tr.commit();
 
@@ -140,4 +144,6 @@ public class ProductDAO {
 
         return sessionFactory;
     }
+
+
 }

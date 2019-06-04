@@ -8,12 +8,12 @@ public class Demo {
         Product product = new Product();
         product.setId(99);
         product.setName("folded table");
-        product.setDescription("black/blue/black");
-        product.setPrice(170);
+        product.setDescription("black/blue");
+        product.setPrice(270);
 
         ProductRepository pr = new ProductRepository();
 
-        pr.delete(99);
+        pr.update(product);
 
 
 
