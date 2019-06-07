@@ -222,9 +222,9 @@ public class ProductDAO {
         return results;
     }
 
-    void findByContainedName() {
+    List<Product> findByContainedName() {
 
-
+        return null;
     }
 
 
