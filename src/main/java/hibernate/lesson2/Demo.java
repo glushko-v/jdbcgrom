@@ -14,14 +14,15 @@ public class Demo {
         product3.setPrice(92);
 
         Product product4 = new Product();
-        product3.setName("TV");
-        product3.setDescription("LED 32' Sony");
-        product3.setPrice(3392);
+        product4.setName("TV");
+        product4.setDescription("LED 32' Sony");
+        product4.setPrice(3392);
+
 
         ProductDAO pd = new ProductDAO();
 
 
-        pd.update(product2);
+        pd.findByName("sofa");
 
 
     }
