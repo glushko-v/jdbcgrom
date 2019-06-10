@@ -22,7 +22,7 @@ public class Demo {
         ProductDAO pd = new ProductDAO();
 
 
-        pd.findByName("sofa");
+        pd.findByPriceSortedDesc(50, 45);
 
 
     }

@@ -169,8 +169,6 @@ public class ProductDAO {
             results = query.getResultList();
 
 
-
-
             tr.commit();
 
 
@@ -222,9 +220,203 @@ public class ProductDAO {
         return results;
     }
 
-    List<Product> findByContainedName() {
+    List<Product> findByContainedName(String name) {
 
-        return null;
+        Session session = null;
+        Transaction tr = null;
+        List<Product> results = new ArrayList<>();
+
+        try {
+
+            session = createSessionFactory().openSession();
+
+            tr = session.getTransaction();
+
+            tr.begin();
+
+            String hql = "FROM Product WHERE name like : name";
+
+            Query query = session.createQuery(hql);
+            query.setParameter("name", "%" + name + "%");
+
+            results = query.getResultList();
+
+
+            tr.commit();
+
+
+        } catch (HibernateException e) {
+            System.err.println("ERROR");
+            System.err.println(e.getMessage());
+            if (tr != null) tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
+        System.out.println(results);
+        return results;
+
+
+    }
+
+    List<Product> findByPrice(int price, int delta) {
+
+        Session session = null;
+        Transaction tr = null;
+        List<Product> results = new ArrayList<>();
+
+        try {
+
+            session = createSessionFactory().openSession();
+
+            tr = session.getTransaction();
+
+            tr.begin();
+
+
+            String hql = "FROM Product WHERE price  <=: price + ?1 AND price >=: price - ?1";
+
+            Query query = session.createQuery(hql);
+            query.setParameter("price", price);
+            query.setParameter(1, delta);
+
+
+
+            results = query.getResultList();
+
+
+            tr.commit();
+
+
+        } catch (HibernateException e) {
+            System.err.println("ERROR");
+            System.err.println(e.getMessage());
+            if (tr != null) tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
+        System.out.println(results);
+        return results;
+
+
+    }
+
+    List<Product> findByNameSortedAsc(String name) {
+        Session session = null;
+        Transaction tr = null;
+        List<Product> results = new ArrayList<>();
+
+        try {
+
+            session = createSessionFactory().openSession();
+
+            tr = session.getTransaction();
+
+            tr.begin();
+
+            String hql = "FROM Product WHERE name like : name ORDER BY name";
+
+            Query query = session.createQuery(hql);
+            query.setParameter("name", "%" + name + "%");
+
+
+            results = query.getResultList();
+
+
+            tr.commit();
+
+
+        } catch (HibernateException e) {
+            System.err.println("ERROR");
+            System.err.println(e.getMessage());
+            if (tr != null) tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
+        System.out.println(results);
+        return results;
+    }
+
+    List<Product> findByNameSortedDesc(String name) {
+        Session session = null;
+        Transaction tr = null;
+        List<Product> results = new ArrayList<>();
+
+        try {
+
+            session = createSessionFactory().openSession();
+
+            tr = session.getTransaction();
+
+            tr.begin();
+
+            String hql = "FROM Product WHERE name like : name ORDER BY name DESC";
+
+            Query query = session.createQuery(hql);
+            query.setParameter("name", "%" + name + "%");
+
+
+            results = query.getResultList();
+
+
+            tr.commit();
+
+
+        } catch (HibernateException e) {
+            System.err.println("ERROR");
+            System.err.println(e.getMessage());
+            if (tr != null) tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
+        System.out.println(results);
+        return results;
+    }
+
+    List<Product> findByPriceSortedDesc(int price, int delta) {
+
+        Session session = null;
+        Transaction tr = null;
+        List<Product> results = new ArrayList<>();
+
+        try {
+
+            session = createSessionFactory().openSession();
+
+            tr = session.getTransaction();
+
+            tr.begin();
+
+
+            String hql = "FROM Product WHERE price  <=: price + ?1 AND price >=: price - ?1 ORDER BY price DESC";
+
+            Query query = session.createQuery(hql);
+            query.setParameter("price", price);
+            query.setParameter(1, delta);
+
+
+
+            results = query.getResultList();
+
+
+            tr.commit();
+
+
+        } catch (HibernateException e) {
+            System.err.println("ERROR");
+            System.err.println(e.getMessage());
+            if (tr != null) tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
+        System.out.println(results);
+        return results;
+
+
     }
 
 
