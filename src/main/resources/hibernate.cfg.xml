@@ -11,6 +11,7 @@
 
 
 <!--        <mapping class="hibernate.lesson1.Product"></mapping>-->
-        <mapping class="hibernate.lesson2.Product"></mapping>
+<!--        <mapping class="hibernate.lesson2.hql.Product"></mapping>-->
+        <mapping class="hibernate.lesson2.native_sql.Product"></mapping>
     </session-factory>
 </hibernate-configuration>

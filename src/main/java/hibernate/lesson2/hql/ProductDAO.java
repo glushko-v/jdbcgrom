@@ -1,4 +1,4 @@
-package hibernate.lesson2;
+package hibernate.lesson2.hql;
 
 
 import org.hibernate.HibernateException;
@@ -392,6 +392,7 @@ public class ProductDAO {
 
 
             String hql = "FROM Product WHERE price  <=: price + ?1 AND price >=: price - ?1 ORDER BY price DESC";
+
 
             Query query = session.createQuery(hql);
             query.setParameter("price", price);
