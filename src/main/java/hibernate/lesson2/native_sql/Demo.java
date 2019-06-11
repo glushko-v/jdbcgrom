@@ -5,7 +5,7 @@ public class Demo {
 
         ProductDAO pd = new ProductDAO();
 
-        pd.findById(998);
+        pd.findByPriceSortedDesc(300, 150);
 
     }
 }
