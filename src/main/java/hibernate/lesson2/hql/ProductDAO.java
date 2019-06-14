@@ -169,6 +169,8 @@ public class ProductDAO {
             results = query.getResultList();
 
 
+
+
             tr.commit();
 
 
