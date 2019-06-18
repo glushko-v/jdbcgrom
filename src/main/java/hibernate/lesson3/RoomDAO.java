@@ -18,6 +18,34 @@ public class RoomDAO extends DAO<Room> {
     @Override
     void delete(long id) {
 
+        Session session = null;
+        Transaction tr = null;
+
+        try {
+
+            session = createSessionFactory().openSession();
+            tr = session.getTransaction();
+
+            tr.begin();
+
+            Room room = new Room();
+            room.setId(id);
+
+            session.delete(room);
+
+            tr.commit();
+
+
+        } catch (HibernateException e) {
+            System.err.println("ERROR");
+            System.err.println(e.getMessage());
+            if (tr != null) tr.rollback();
+
+        } finally {
+            if (session != null) session.close();
+            System.out.println("Deleted");
+        }
+
     }
 
     @Override
@@ -27,8 +55,42 @@ public class RoomDAO extends DAO<Room> {
 
     @Override
     Room update(Room room, long id) {
+        Session session = null;
+        Transaction tr = null;
+
+
+        try {
+
+            session = createSessionFactory().openSession();
+            tr = session.getTransaction();
+            tr.begin();
+
+            room.setId(id);
+
+            session.update(room);
+
+
+            tr.commit();
+
+            return room;
+
+        } catch (HibernateException e) {
+
+            System.err.println("ERROR");
+            System.err.println(e.getMessage());
+            if (tr != null) tr.rollback();
+
+        } finally {
+            if (session != null) {
+                session.close();
+                System.out.println("Updated");
+            }
+        }
+
+
         return null;
     }
+
 
     @Override
     List<Room> findById(long id) {

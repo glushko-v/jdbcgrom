@@ -17,11 +17,11 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room" + id + ", price = " + price + ", hotel = " + hotel;
+        return "Room" + id + ", price = " + price + ", hotel = " + hotel + " available from " + dateAvailableFrom;
     }
 
-    public Room(long id, int numberOfGuests, double price, int breakfastIncluded, int petsAllowed, Date dateAvailableFrom, Hotel hotel) {
-        this.id = id;
+    public Room(int numberOfGuests, double price, int breakfastIncluded, int petsAllowed, Date dateAvailableFrom, Hotel hotel) {
+
         this.numberOfGuests = numberOfGuests;
         this.price = price;
         this.breakfastIncluded = breakfastIncluded;
@@ -36,6 +36,7 @@ public class Room {
     @Id
     @Column(name = "ID")
     @SequenceGenerator(name = "R_SEQ", sequenceName = "ROOM_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "R_SEQ")
     public long getId() {
         return id;
     }
@@ -90,7 +91,7 @@ public class Room {
     }
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "HOTEL_FK")
+    @JoinColumn(name = "HOTEL_ID")
     public Hotel getHotel() {
         return hotel;
     }
