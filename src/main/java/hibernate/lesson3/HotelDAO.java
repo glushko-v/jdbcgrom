@@ -78,6 +78,7 @@ public class HotelDAO extends DAO<Hotel> {
             session.delete(hotel);
 
             tr.commit();
+            System.out.println("Deleted");
 
 
         } catch (HibernateException e) {
@@ -87,7 +88,7 @@ public class HotelDAO extends DAO<Hotel> {
 
         } finally {
             if (session != null) session.close();
-            System.out.println("Deleted");
+
         }
     }
 

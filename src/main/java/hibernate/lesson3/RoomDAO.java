@@ -34,6 +34,7 @@ public class RoomDAO extends DAO<Room> {
             session.delete(room);
 
             tr.commit();
+            System.out.println("Deleted");
 
 
         } catch (HibernateException e) {
@@ -43,7 +44,7 @@ public class RoomDAO extends DAO<Room> {
 
         } finally {
             if (session != null) session.close();
-            System.out.println("Deleted");
+
         }
 
     }
@@ -71,6 +72,7 @@ public class RoomDAO extends DAO<Room> {
 
 
             tr.commit();
+            System.out.println("Updated");
 
             return room;
 
@@ -83,7 +85,7 @@ public class RoomDAO extends DAO<Room> {
         } finally {
             if (session != null) {
                 session.close();
-                System.out.println("Updated");
+
             }
         }
 

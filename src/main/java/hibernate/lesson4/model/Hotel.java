@@ -1,34 +1,23 @@
-package hibernate.lesson3;
+package hibernate.lesson4.model;
 
 import javax.persistence.*;
-
+import java.util.List;
 
 @Entity
 @Table(name = "HOTEL")
 public class Hotel {
+
 
     private long id;
     private String name;
     private String country;
     private String city;
     private String street;
-
+    private List<Room> rooms;
 
     @Override
     public String toString() {
-        return  id + " " + name + " " + country + ", " + " " + city;
-    }
-
-    @Id
-    @Column(name = "ID_HOTEL")
-    @SequenceGenerator(name = "H_SEQ", sequenceName = "HOTEL_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "H_SEQ")
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        return name + " " + city;
     }
 
     public Hotel(String name, String country, String city, String street) {
@@ -41,7 +30,15 @@ public class Hotel {
     public Hotel() {
     }
 
-    @Column(name = "HOTEL_NAME")
+    @Id
+    @Column(name = "ID_HOTEL")
+    @SequenceGenerator(name = "H_SEQ", sequenceName = "HOTEL_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "H_SEQ")
+    public long getId() {
+        return id;
+    }
+
+    @Column(name = "NAME")
     public String getName() {
         return name;
     }
@@ -61,6 +58,15 @@ public class Hotel {
         return street;
     }
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -75,5 +81,9 @@ public class Hotel {
 
     public void setStreet(String street) {
         this.street = street;
+    }
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
     }
 }

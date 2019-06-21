@@ -42,6 +42,7 @@ public abstract class DAO<T> {
 
 
             tr.commit();
+            System.out.println("Save completed");
 
         } catch (HibernateException e) {
             System.err.println("ERROR");
@@ -50,7 +51,7 @@ public abstract class DAO<T> {
 
         } finally {
             if (session != null) session.close();
-            System.out.println("Save completed");
+
         }
 
 

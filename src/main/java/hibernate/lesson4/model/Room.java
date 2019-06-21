@@ -1,7 +1,9 @@
-package hibernate.lesson3;
+package hibernate.lesson4.model;
 
-import java.util.Date;
+
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "ROOM")
@@ -10,18 +12,17 @@ public class Room {
     private long id;
     private int numberOfGuests;
     private double price;
-    private int breakfastIncluded;
-    private int petsAllowed;
+    private boolean breakfastIncluded;
+    private boolean petsAllowed;
     private Date dateAvailableFrom;
-    Hotel hotel;
+    private Hotel hotel;
 
     @Override
     public String toString() {
-        return "Room" + id + ", price = " + price + ", hotel = " + hotel + " available from " + dateAvailableFrom;
+        return "Room " +  id + " " + hotel;
     }
 
-    public Room(int numberOfGuests, double price, int breakfastIncluded, int petsAllowed, Date dateAvailableFrom, Hotel hotel) {
-
+    public Room(int numberOfGuests, double price, boolean breakfastIncluded, boolean petsAllowed, Date dateAvailableFrom, Hotel hotel) {
         this.numberOfGuests = numberOfGuests;
         this.price = price;
         this.breakfastIncluded = breakfastIncluded;
@@ -41,17 +42,9 @@ public class Room {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     @Column(name = "NUMBER_OF_GUESTS")
     public int getNumberOfGuests() {
         return numberOfGuests;
-    }
-
-    public void setNumberOfGuests(int numberOfGuests) {
-        this.numberOfGuests = numberOfGuests;
     }
 
     @Column(name = "PRICE")
@@ -59,26 +52,14 @@ public class Room {
         return price;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     @Column(name = "BREAKFAST_INCLUDED")
-    public int getBreakfastIncluded() {
+    public boolean isBreakfastIncluded() {
         return breakfastIncluded;
     }
 
-    public void setBreakfastIncluded(int breakfastIncluded) {
-        this.breakfastIncluded = breakfastIncluded;
-    }
-
     @Column(name = "PETS_ALLOWED")
-    public int getPetsAllowed() {
+    public boolean isPetsAllowed() {
         return petsAllowed;
-    }
-
-    public void setPetsAllowed(int petsAllowed) {
-        this.petsAllowed = petsAllowed;
     }
 
     @Column(name = "DATE_AVAILABLE_FROM")
@@ -86,14 +67,34 @@ public class Room {
         return dateAvailableFrom;
     }
 
-    public void setDateAvailableFrom(Date dateAvailableFrom) {
-        this.dateAvailableFrom = dateAvailableFrom;
-    }
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "HOTEL_ID", referencedColumnName = "ID_HOTEL")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_HOTEL")
     public Hotel getHotel() {
         return hotel;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setNumberOfGuests(int numberOfGuests) {
+        this.numberOfGuests = numberOfGuests;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setBreakfastIncluded(boolean breakfastIncluded) {
+        this.breakfastIncluded = breakfastIncluded;
+    }
+
+    public void setPetsAllowed(boolean petsAllowed) {
+        this.petsAllowed = petsAllowed;
+    }
+
+    public void setDateAvailableFrom(Date dateAvailableFrom) {
+        this.dateAvailableFrom = dateAvailableFrom;
     }
 
     public void setHotel(Hotel hotel) {

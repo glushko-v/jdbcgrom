@@ -18,11 +18,14 @@ public class Demo {
 
         Room room = new Room(4, 200, 0, 0, date, hotel1);
         Room room1 = new Room(1, 90, 1, 0, date, hotel2);
+        Room room3 = new Room(2, 150, 1, 1, date, hotel2);
+        Room room4 = new Room(3, 175, 0, 0, date, hotel2);
+        Room room5 = new Room(1, 250, 1, 0, date, hotel1);
 
         HotelDAO hd = new HotelDAO();
         RoomDAO rd = new RoomDAO();
 
-        rd.save(room1);
+        rd.save(room5);
 
 
 
