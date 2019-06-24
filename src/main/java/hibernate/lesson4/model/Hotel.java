@@ -58,7 +58,7 @@ public class Hotel {
         return street;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     public List<Room> getRooms() {
         return rooms;
     }

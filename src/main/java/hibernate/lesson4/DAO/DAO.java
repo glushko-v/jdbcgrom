@@ -14,6 +14,8 @@ public abstract class DAO<T> {
 
 
 
+
+
     SessionFactory createSessionFactory() {
         if (sessionFactory == null) {
 
@@ -167,9 +169,9 @@ public abstract class DAO<T> {
     public abstract void delete(long id);
 
 
-    public abstract List<T> findById(long id);
+    public abstract T findById(long id);
 
-
+    public abstract T update(T t, long id);
 
 
 }

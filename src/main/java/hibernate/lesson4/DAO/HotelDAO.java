@@ -6,12 +6,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-
 import javax.persistence.Query;
-import java.util.List;
+
 
 public class HotelDAO extends DAO<Hotel> {
-
 
 
     @Override
@@ -34,8 +32,40 @@ public class HotelDAO extends DAO<Hotel> {
 //        super.update(id);
 //    }
 
+
     @Override
-    public List<Hotel> findById(long id) {
+    public Hotel findById(long id) {
+
+        Session session = null;
+        Transaction tr = null;
+
+        try {
+
+            session = createSessionFactory().openSession();
+            tr = session.getTransaction();
+
+            tr.begin();
+
+
+            Hotel hotel = session.get(Hotel.class, id);
+
+
+            tr.commit();
+
+            System.out.println(hotel);
+
+
+            return hotel;
+
+
+        } catch (HibernateException e) {
+            System.err.println("ERROR");
+            System.err.println(e.getMessage());
+            if (tr != null) tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
         return null;
     }
 
@@ -45,7 +75,7 @@ public class HotelDAO extends DAO<Hotel> {
         Session session = null;
         Transaction tr = null;
 
-        try{
+        try {
 
             session = createSessionFactory().openSession();
             tr = session.getTransaction();
@@ -66,7 +96,7 @@ public class HotelDAO extends DAO<Hotel> {
             System.out.print("Deleted");
 
 
-        } catch (HibernateException e){
+        } catch (HibernateException e) {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
@@ -74,4 +104,53 @@ public class HotelDAO extends DAO<Hotel> {
             if (session != null) session.close();
         }
     }
+
+
+    @Override
+    public Hotel update(Hotel hotel, long id) {
+
+        Session session = null;
+        Transaction tr = null;
+
+        try {
+
+            session = createSessionFactory().openSession();
+            tr = session.getTransaction();
+
+            tr.begin();
+
+            Query query = session.createSQLQuery("UPDATE HOTEL SET COUNTRY = ?, CITY = ?, STREET = ?, NAME = ? WHERE ID_HOTEL = ?");
+            query.setParameter(1, hotel.getCountry());
+            query.setParameter(2, hotel.getCity());
+            query.setParameter(3, hotel.getStreet());
+            query.setParameter(4, hotel.getName());
+            query.setParameter(5, id);
+
+            int res = query.executeUpdate();
+            System.out.println(res);
+
+
+
+
+            tr.commit();
+
+            System.out.println("Updated");
+
+            return hotel;
+
+        } catch (HibernateException e) {
+            System.err.println("ERROR");
+            System.err.println(e.getMessage());
+            if (tr != null) tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
+
+        return null;
+
+    }
+
+
+
 }
