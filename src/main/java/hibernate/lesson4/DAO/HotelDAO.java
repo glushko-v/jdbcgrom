@@ -93,7 +93,7 @@ public class HotelDAO extends DAO<Hotel> {
 
             tr.commit();
 
-            System.out.print("Deleted");
+            System.out.println("Deleted");
 
 
         } catch (HibernateException e) {

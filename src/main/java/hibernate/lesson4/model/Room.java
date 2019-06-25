@@ -12,8 +12,8 @@ public class Room {
     private long id;
     private int numberOfGuests;
     private double price;
-    private boolean breakfastIncluded;
-    private boolean petsAllowed;
+    private char breakfastIncluded;
+    private char petsAllowed;
     private Date dateAvailableFrom;
     private Hotel hotel;
 
@@ -22,7 +22,7 @@ public class Room {
         return "Room " +  id + " " + hotel;
     }
 
-    public Room(int numberOfGuests, double price, boolean breakfastIncluded, boolean petsAllowed, Date dateAvailableFrom, Hotel hotel) {
+    public Room(int numberOfGuests, double price, char breakfastIncluded, char petsAllowed, Date dateAvailableFrom, Hotel hotel) {
         this.numberOfGuests = numberOfGuests;
         this.price = price;
         this.breakfastIncluded = breakfastIncluded;
@@ -52,13 +52,14 @@ public class Room {
         return price;
     }
 
+
     @Column(name = "BREAKFAST_INCLUDED")
-    public boolean isBreakfastIncluded() {
+    public char getBreakfastIncluded() {
         return breakfastIncluded;
     }
 
     @Column(name = "PETS_ALLOWED")
-    public boolean isPetsAllowed() {
+    public char getPetsAllowed() {
         return petsAllowed;
     }
 
@@ -67,8 +68,8 @@ public class Room {
         return dateAvailableFrom;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_HOTEL")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "HOTEL_ID")
     public Hotel getHotel() {
         return hotel;
     }
@@ -85,11 +86,11 @@ public class Room {
         this.price = price;
     }
 
-    public void setBreakfastIncluded(boolean breakfastIncluded) {
+    public void setBreakfastIncluded(char breakfastIncluded) {
         this.breakfastIncluded = breakfastIncluded;
     }
 
-    public void setPetsAllowed(boolean petsAllowed) {
+    public void setPetsAllowed(char petsAllowed) {
         this.petsAllowed = petsAllowed;
     }
 

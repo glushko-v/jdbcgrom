@@ -16,5 +16,6 @@
         <mapping class="hibernate.lesson4.model.Hotel"></mapping>
         <mapping class="hibernate.lesson4.model.Order"></mapping>
         <mapping class="hibernate.lesson4.model.User"></mapping>
+        
     </session-factory>
 </hibernate-configuration>

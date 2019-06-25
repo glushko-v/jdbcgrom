@@ -41,7 +41,7 @@ public class RoomDAO extends DAO<Room> {
 
             tr.commit();
 
-            System.out.print("Deleted");
+            System.out.println("Deleted");
 
 
         } catch (HibernateException e) {
@@ -107,8 +107,8 @@ public class RoomDAO extends DAO<Room> {
                     "DATE_AVAILABLE_FROM = ? HOTEL_ID = ? WHERE ID_ROOM = ?");
             query.setParameter(1, room.getNumberOfGuests());
             query.setParameter(2, room.getPrice());
-            query.setParameter(3, room.isBreakfastIncluded());
-            query.setParameter(4, room.isPetsAllowed());
+            query.setParameter(3, room.getBreakfastIncluded());
+            query.setParameter(4, room.getPetsAllowed());
             query.setParameter(5, room.getDateAvailableFrom());
             query.setParameter(6, room.getHotel());
             query.setParameter(7, id);

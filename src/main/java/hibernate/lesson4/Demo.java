@@ -33,16 +33,22 @@ public class Demo {
         User user1 = new User("Jack", "1234", "UK");
         User user2 = new User("Bill", "556622", "USA");
 
-        Room room1 = new Room(2, 100, false, false, date1, hilton);
-        Room room2 = new Room(3, 150, true, false, date2, conrad);
+        Room room1 = new Room(2, 100, 'N', 'N', date1, hilton);
+        Room room2 = new Room(3, 150, 'Y', 'N', date2, conrad);
 
         HotelDAO hotelDAO = new HotelDAO();
         UserDAO userDAO = new UserDAO();
         RoomDAO roomDAO = new RoomDAO();
 
 
-        roomDAO.save(room1);
-        roomDAO.save(room2);
+//        roomDAO.save(room1);
+//        roomDAO.save(room2);
+
+        hotelDAO.delete(94);
+        hotelDAO.delete(93);
+//        roomDAO.delete(35);
+//        roomDAO.delete(34);
+
 
 
 
