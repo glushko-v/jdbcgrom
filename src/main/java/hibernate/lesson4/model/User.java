@@ -12,16 +12,18 @@ public class User {
     private String password;
     private String country;
     private List orders;
+    private String userType;
 
     @Override
     public String toString() {
         return "User " +  id + " " + userName + " " + country;
     }
 
-    public User(String userName, String password, String country) {
+    public User(String userName, String password, String country, String userType) {
         this.userName = userName;
         this.password = password;
         this.country = country;
+        this.userType = userType;
     }
 
     public User() {
@@ -50,6 +52,11 @@ public class User {
         return country;
     }
 
+    @Column(name = "USER_TYPE")
+    public String getUserType() {
+        return userType;
+    }
+
     @OneToMany(cascade = CascadeType.ALL)
     public List<Order> getOrders() {
         return orders;
@@ -73,5 +80,9 @@ public class User {
 
     public void setOrders(List orders) {
         this.orders = orders;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }

@@ -34,9 +34,12 @@ public class RoomDAO extends DAO<Room> {
 
             tr.begin();
 
-            Query query = session.createSQLQuery("DELETE FROM ROOM WHERE ID_ROOM =?").addEntity(Room.class);
-            query.setParameter(1, id);
-            query.executeUpdate();
+//            Query query = session.createSQLQuery("DELETE FROM ROOM WHERE ID_ROOM =?").addEntity(Room.class);
+//            query.setParameter(1, id);
+//            query.executeUpdate();
+
+            Room room = session.get(Room.class, id);
+            session.delete(room);
 
 
             tr.commit();

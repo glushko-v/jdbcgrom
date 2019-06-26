@@ -82,13 +82,13 @@ public class HotelDAO extends DAO<Hotel> {
 
             tr.begin();
 
-            Query query = session.createSQLQuery("DELETE FROM HOTEL WHERE ID_HOTEL =?").addEntity(Hotel.class);
-            query.setParameter(1, id);
-            query.executeUpdate();
+//            Query query = session.createSQLQuery("DELETE FROM HOTEL WHERE ID_HOTEL =?").addEntity(Hotel.class);
+//            query.setParameter(1, id);
+//            query.executeUpdate();
 
-//            Hotel hotel = session.get(Hotel.class, id);
-//
-//            session.delete(hotel);
+            Hotel hotel = session.get(Hotel.class, id);
+
+            session.delete(hotel);
 
 
             tr.commit();

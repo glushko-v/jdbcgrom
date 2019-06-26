@@ -33,9 +33,12 @@ public class OrderDAO extends DAO<Order> {
 
             tr.begin();
 
-            Query query = session.createSQLQuery("DELETE FROM ORDER1 WHERE ID_ORDER =?").addEntity(Order.class);
-            query.setParameter(1, id);
-            query.executeUpdate();
+//            Query query = session.createSQLQuery("DELETE FROM ORDER1 WHERE ID_ORDER =?").addEntity(Order.class);
+//            query.setParameter(1, id);
+//            query.executeUpdate();
+
+            Order order = session.get(Order.class, id);
+            session.delete(order);
 
             tr.commit();
 

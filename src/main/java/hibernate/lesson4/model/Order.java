@@ -44,7 +44,7 @@ public class Order {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_ROOM")
+    @JoinColumn(name = "ROOM_ID")
     public Room getRoom() {
         return room;
     }
