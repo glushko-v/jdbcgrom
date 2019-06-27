@@ -33,7 +33,7 @@ public class Demo {
         Hotel conrad = new Hotel("Conrad", "Turkey", "Istanbul", "Istiklal");
         Hotel nemo = new Hotel("Nemo", "Ukraine", "Odessa", "V.Inber");
         Hotel nemo1 = new Hotel("Nemo", "Ukraine", "Odessa", "V.Inber");
-        Hotel ibis = new Hotel("Ibis", "Belguim", "Brussels", "Somestreet");
+        Hotel ibis = new Hotel("Ibis", "Belguim", "Brussels", null);
 
 //        User user1 = new User("Jack", "1234", "UK", UserType.USER.toString());
 //        User user2 = new User("Bill", "556622", "USA", UserType.USER.toString());
@@ -52,7 +52,7 @@ public class Demo {
 //        Room room3 = new Room(2, 200, 'Y', 'N', date1, hotelDAO.findById(96));
 
 //        hotelDAO.save(nemo);
-        System.out.println(hs.isHotelExists(ibis));
+
 
 
 

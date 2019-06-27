@@ -1,5 +1,6 @@
 package hibernate.lesson4.service;
 
+import hibernate.lesson4.DAO.HotelDAO;
 import hibernate.lesson4.model.Hotel;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -8,18 +9,18 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HotelService {
 
     //1. При save сохраняется отель, который уже есть в базе
-    //2. Нет пустых полей
-
-    //TODO
+    //2. Есть пустые поля
 
 
-    SessionFactory sessionFactory;
+
+    private SessionFactory sessionFactory;
+    private List<Hotel> hotels;
+    private HotelDAO hotelDAO = new HotelDAO();
 
 
     SessionFactory createSessionFactory() {
@@ -32,9 +33,8 @@ public class HotelService {
         return sessionFactory;
     }
 
-    public boolean isHotelExists(Hotel hotel) {
+    private boolean isHotelExists(Hotel hotel) {
 
-        List<Hotel> hotels;
 
         Session session = null;
         Transaction tr = null;
@@ -49,7 +49,7 @@ public class HotelService {
             Query query = session.createSQLQuery("SELECT * FROM HOTEL").addEntity(Hotel.class);
             hotels = query.getResultList();
 
-            for (Hotel hotelFromDB: hotels) {
+            for (Hotel hotelFromDB : hotels) {
                 if (hotel.equals(hotelFromDB)) return true;
 
             }
@@ -57,8 +57,6 @@ public class HotelService {
             tr.commit();
 
             return false;
-
-
 
 
         } catch (HibernateException e) {
@@ -73,6 +71,30 @@ public class HotelService {
 
 
     }
+
+    private boolean isNullFields(Hotel hotel) {
+
+        return (hotel.getCity() == null || hotel.getCountry() == null || hotel.getStreet() == null || hotel.getName() == null);
+
+
+    }
+
+    private boolean checkHotel(Hotel hotel){
+
+        return (isHotelExists(hotel) && isNullFields(hotel));
+
+    }
+
+    public Hotel save(Hotel hotel){
+
+        if (!checkHotel(hotel)) return hotelDAO.save(hotel);
+
+        return null;
+    }
+
+
+
+
 
 
 }
