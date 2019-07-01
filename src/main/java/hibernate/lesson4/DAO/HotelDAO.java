@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import javax.persistence.Query;
+import java.util.List;
 
 
 public class HotelDAO extends DAO<Hotel> {
@@ -130,8 +131,6 @@ public class HotelDAO extends DAO<Hotel> {
             System.out.println(res);
 
 
-
-
             tr.commit();
 
             System.out.println("Updated");
@@ -151,6 +150,77 @@ public class HotelDAO extends DAO<Hotel> {
 
     }
 
+
+    public List<Hotel> findHotelByName(String name) {
+
+        Session session = null;
+        Transaction tr = null;
+        List<Hotel> hotels;
+
+        try {
+
+            session = createSessionFactory().openSession();
+            tr = session.getTransaction();
+
+            tr.begin();
+
+
+            Query query = session.createSQLQuery("SELECT * FROM HOTEL WHERE NAME = ?").addEntity(Hotel.class);
+            query.setParameter(1, name);
+            hotels = query.getResultList();
+
+            tr.commit();
+
+            return hotels;
+
+        } catch (HibernateException e) {
+            System.err.println("ERROR");
+            e.printStackTrace();
+            if (tr != null) tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
+
+        return null;
+    }
+
+
+    public List<Hotel> findHotelByCity(String city){
+
+        Session session = null;
+        Transaction tr = null;
+        List<Hotel> hotels;
+
+        try {
+
+            session = createSessionFactory().openSession();
+            tr = session.getTransaction();
+
+            tr.begin();
+
+
+            Query query = session.createSQLQuery("SELECT * FROM HOTEL WHERE CITY = ?").addEntity(Hotel.class);
+            query.setParameter(1, city);
+            hotels = query.getResultList();
+
+            tr.commit();
+
+            return hotels;
+
+        } catch (HibernateException e) {
+            System.err.println("ERROR");
+            e.printStackTrace();
+            if (tr != null) tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
+
+
+        return null;
+
+    }
 
 
 }

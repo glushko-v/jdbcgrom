@@ -13,6 +13,8 @@ public class User {
     private String country;
     private List orders;
     private String userType;
+    private boolean isRegistered = false;
+    private boolean isLoggedIn = false;
 
     @Override
     public String toString() {
@@ -84,5 +86,21 @@ public class User {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public boolean isRegistered() {
+        return isRegistered;
+    }
+
+    public boolean isLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setRegistered(boolean registered) {
+        isRegistered = registered;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        isLoggedIn = loggedIn;
     }
 }

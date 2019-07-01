@@ -13,10 +13,6 @@ import java.util.List;
 
 public class HotelService {
 
-    //1. При save сохраняется отель, который уже есть в базе
-    //2. Есть пустые поля
-
-
 
     private SessionFactory sessionFactory;
     private List<Hotel> hotels;
@@ -79,22 +75,33 @@ public class HotelService {
 
     }
 
-    private boolean checkHotel(Hotel hotel){
+    private boolean checkHotel(Hotel hotel) {
 
         return (isHotelExists(hotel) && isNullFields(hotel));
 
     }
 
-    public Hotel save(Hotel hotel){
+    public Hotel save(Hotel hotel) {
+        //1. При save сохраняется отель, который уже есть в базе
+        //2. Есть пустые поля
 
         if (!checkHotel(hotel)) return hotelDAO.save(hotel);
 
         return null;
     }
 
+    public Hotel findById(long id) {
 
 
+        return hotelDAO.findById(id);
 
+    }
+
+    public void delete(long id){
+
+        hotelDAO.delete(id);
+
+    }
 
 
 }

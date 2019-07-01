@@ -1,12 +1,17 @@
 package hibernate.lesson4.DAO;
 
+import hibernate.lesson4.model.Filter;
+import hibernate.lesson4.model.Order;
 import hibernate.lesson4.model.Room;
+import hibernate.lesson4.model.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import javax.persistence.Query;
+import java.util.Date;
+import java.util.List;
 
 
 public class RoomDAO extends DAO<Room> {
@@ -135,6 +140,107 @@ public class RoomDAO extends DAO<Room> {
         } finally {
             if (session != null) session.close();
         }
+
+
+        return null;
+    }
+
+
+    public List<Room> findRooms(Filter filter){
+        Session session = null;
+        Transaction tr = null;
+        List<Room> rooms;
+
+
+
+        try {
+
+        session = createSessionFactory().openSession();
+        tr = session.getTransaction();
+        tr.begin();
+
+        Query query = session.createSQLQuery("SELECT * FROM ROOM WHERE NUMBER_OF_GUESTS = ?, PRICE = ? BREAKFAST_INCLUDED = ?, PETS_ALLOWED = ?, DATE_AVAILABLE_FROM = ? HOTEL_ID = ?");
+        query.setParameter(1, filter.getNumberOfGuests());
+        query.setParameter(2, filter.getPrice());
+        query.setParameter(3, filter.isBreakfastIncluded());
+        query.setParameter(4, filter.isPetsAllowed());
+        query.setParameter(5, filter.getDateAvailableFrom());
+        query.setParameter(6, filter.getHotel().getId());
+
+        rooms = query.getResultList();
+
+        tr.commit();
+
+        return rooms;
+
+
+        } catch (HibernateException e) {
+            System.err.println("ERROR");
+            System.err.println(e.getMessage());
+            if (tr != null) tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
+
+        return null;
+    }
+
+    public void bookRoom(long roomId, long userId, Date dateFrom, Date dateTo){
+        UserDAO ud = new UserDAO();
+
+        //Комната считается забронированной, если isBooked - true + обновлена dateAvailableFrom
+        //1. получаем из базы комнату по findById +++
+        //2. получаем из базы dateAvailableFrom ++
+        //3. сравниваем dateAvailableFrom и dateFrom++
+        //4. если dateAvailableFrom <= dateFrom --> isBooked = true, setDateAvailableFrom = dateTo +++
+        //5. получаем из базы юзера по findById +++
+        //6. проверяем залогинен и зареган ли?
+        //7. создаем новый ордер и передаем его в БД++
+
+        Room room = findById(roomId);
+        User user = ud.findById(userId);
+
+
+        if (room.getDateAvailableFrom().after(dateFrom)) {
+            room.setDateAvailableFrom(dateTo);
+            room.setBooked(true);
+            createOrder(room, user, dateFrom, dateTo);
+
+        }
+
+    }
+
+    public Order createOrder(Room room, User user, Date dateFrom, Date dateTo){
+
+        Order order = new Order(user, room, dateFrom, dateTo, room.getPrice());
+        Session session = null;
+        Transaction tr = null;
+
+        try{
+
+            session = createSessionFactory().openSession();
+            tr = session.getTransaction();
+            tr.begin();
+
+            session.save(order);
+
+
+            tr.commit();
+
+            return order;
+
+
+        }catch(HibernateException e){
+            System.err.println("ERROR");
+            e.printStackTrace();
+            tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
+
+
 
 
         return null;

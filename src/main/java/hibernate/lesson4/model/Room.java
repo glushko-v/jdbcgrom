@@ -16,6 +16,7 @@ public class Room {
     private char petsAllowed;
     private Date dateAvailableFrom;
     private Hotel hotel;
+    private boolean isBooked = false;
 
     @Override
     public String toString() {
@@ -74,6 +75,10 @@ public class Room {
         return hotel;
     }
 
+    public boolean isBooked() {
+        return isBooked;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -100,5 +105,9 @@ public class Room {
 
     public void setHotel(Hotel hotel) {
         this.hotel = hotel;
+    }
+
+    public void setBooked(boolean booked) {
+        isBooked = booked;
     }
 }
