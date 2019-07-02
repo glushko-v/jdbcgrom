@@ -20,8 +20,8 @@ public class RoomService {
         //2. залогинен ли юзер++
 
 
-        if (userDAO.findById(userId).isRegistered() && userDAO.findById(userId).isLoggedIn())
-            roomDAO.bookRoom(roomId, userId, dateFrom, dateTo);
+//        if (userDAO.findById(userId).isRegistered() && userDAO.findById(userId).isLoggedIn())
+//            roomDAO.bookRoom(roomId, userId, dateFrom, dateTo);
 
 
     }

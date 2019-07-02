@@ -1,6 +1,10 @@
 package hibernate.lesson4.DAO;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.exception.ConstraintViolationException;
+
+import javax.persistence.PersistenceException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 
 public abstract class DAO<T> {
@@ -44,11 +48,13 @@ public abstract class DAO<T> {
 
             return t;
 
-        } catch (HibernateException e) {
+
+        } catch (HibernateException h){
             System.err.println("ERROR");
-            System.err.println(e.getMessage());
+            h.printStackTrace();
             if (tr != null) tr.rollback();
-        } finally {
+        }
+        finally {
             if (session != null) session.close();
         }
 

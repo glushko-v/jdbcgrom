@@ -35,8 +35,10 @@ public class Demo {
         Hotel nemo1 = new Hotel("Nemo", "Ukraine", "Odessa", "V.Inber");
         Hotel ibis = new Hotel("Ibis", "Belguim", "Brussels", null);
 
-//        User user1 = new User("Jack", "1234", "UK", UserType.USER.toString());
+//        User user1 = new User("Jack", "1234", "UK", UserType.USER.toString(), false);
 //        User user2 = new User("Bill", "556622", "USA", UserType.USER.toString());
+//        User user3 = new User("Nancy", "555555", "Ukraine", UserType.USER.toString(), false, false);
+//        User user4 = new User("Drew", "ssss", "Germany", UserType.USER.toString());
 
 
 
@@ -52,6 +54,14 @@ public class Demo {
 //        Room room3 = new Room(2, 200, 'Y', 'N', date1, hotelDAO.findById(96));
 
 //        hotelDAO.save(nemo);
+
+
+
+        userDAO.delete(51);
+
+
+
+
 
 
 

@@ -5,7 +5,12 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
+
+import javax.persistence.PersistenceException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 
 
 public class UserDAO extends DAO<User> {
@@ -121,4 +126,56 @@ public class UserDAO extends DAO<User> {
 
         return null;
     }
+
+    public void registerUser(User user) throws Exception {
+
+        if (checkUserName(user.getUserName())) throw new Exception("Sorry user with name " + user.getUserName() + " already exists");
+        else {
+            save(user);
+            user.setRegistered(true);
+        }
+    }
+
+    private boolean checkUserName(String userName){
+
+        Session session = null;
+        Transaction tr = null;
+        List<String> names;
+
+        try {
+
+            session = createSessionFactory().openSession();
+            tr = session.getTransaction();
+            tr.begin();
+
+
+            Query query = session.createSQLQuery("SELECT * FROM USER1 WHERE USER_NAME = ?").addEntity(User.class);
+            query.setParameter(1, userName);
+
+            names = query.getResultList();
+            int res = names.size();
+
+
+
+            tr.commit();
+
+            return (res != 0);
+
+
+        } catch (HibernateException e) {
+            System.err.println("ERROR");
+            e.printStackTrace();
+            if (tr != null) tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
+
+        return true;
+
+    }
+
+
+
+
 }
