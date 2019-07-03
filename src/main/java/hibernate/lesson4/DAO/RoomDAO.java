@@ -1,9 +1,6 @@
 package hibernate.lesson4.DAO;
 
-import hibernate.lesson4.model.Filter;
-import hibernate.lesson4.model.Order;
-import hibernate.lesson4.model.Room;
-import hibernate.lesson4.model.User;
+import hibernate.lesson4.model.*;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -125,8 +122,6 @@ public class RoomDAO extends DAO<Room> {
             System.out.println(res);
 
 
-
-
             tr.commit();
 
             System.out.println("Updated");
@@ -146,32 +141,31 @@ public class RoomDAO extends DAO<Room> {
     }
 
 
-    public List<Room> findRooms(Filter filter){
+    public List<Room> findRooms(Filter filter) {
         Session session = null;
         Transaction tr = null;
         List<Room> rooms;
 
 
-
         try {
 
-        session = createSessionFactory().openSession();
-        tr = session.getTransaction();
-        tr.begin();
+            session = createSessionFactory().openSession();
+            tr = session.getTransaction();
+            tr.begin();
 
-        Query query = session.createSQLQuery("SELECT * FROM ROOM WHERE NUMBER_OF_GUESTS = ?, PRICE = ? BREAKFAST_INCLUDED = ?, PETS_ALLOWED = ?, DATE_AVAILABLE_FROM = ? HOTEL_ID = ?");
-        query.setParameter(1, filter.getNumberOfGuests());
-        query.setParameter(2, filter.getPrice());
-        query.setParameter(3, filter.isBreakfastIncluded());
-        query.setParameter(4, filter.isPetsAllowed());
-        query.setParameter(5, filter.getDateAvailableFrom());
-        query.setParameter(6, filter.getHotel().getId());
+            Query query = session.createSQLQuery("SELECT * FROM ROOM WHERE NUMBER_OF_GUESTS = ?, PRICE = ? BREAKFAST_INCLUDED = ?, PETS_ALLOWED = ?, DATE_AVAILABLE_FROM = ? HOTEL_ID = ?");
+            query.setParameter(1, filter.getNumberOfGuests());
+            query.setParameter(2, filter.getPrice());
+            query.setParameter(3, filter.isBreakfastIncluded());
+            query.setParameter(4, filter.isPetsAllowed());
+            query.setParameter(5, filter.getDateAvailableFrom());
+            query.setParameter(6, filter.getHotel().getId());
 
-        rooms = query.getResultList();
+            rooms = query.getResultList();
 
-        tr.commit();
+            tr.commit();
 
-        return rooms;
+            return rooms;
 
 
         } catch (HibernateException e) {
@@ -186,7 +180,7 @@ public class RoomDAO extends DAO<Room> {
         return null;
     }
 
-    public void bookRoom(long roomId, long userId, Date dateFrom, Date dateTo){
+    public void bookRoom(long roomId, long userId, Date dateFrom, Date dateTo) {
         UserDAO ud = new UserDAO();
 
         //Комната считается забронированной, если isBooked - true + обновлена dateAvailableFrom
@@ -195,29 +189,30 @@ public class RoomDAO extends DAO<Room> {
         //3. сравниваем dateAvailableFrom и dateFrom++
         //4. если dateAvailableFrom <= dateFrom --> isBooked = true, setDateAvailableFrom = dateTo +++
         //5. получаем из базы юзера по findById +++
-        //6. проверяем залогинен и зареган ли?
+        //6. проверяем залогинен и зареган ли?+++
         //7. создаем новый ордер и передаем его в БД++
 
         Room room = findById(roomId);
         User user = ud.findById(userId);
 
 
-        if (room.getDateAvailableFrom().after(dateFrom)) {
+        if (room.getDateAvailableFrom().after(dateFrom) && UserSession.isRegistered(user) && UserSession.isLoggedIn(user)) {
             room.setDateAvailableFrom(dateTo);
-            room.setBooked(true);
+            RoomSession.bookRoom(room);
             createOrder(room, user, dateFrom, dateTo);
+            update(room, roomId);
 
         }
 
     }
 
-    public Order createOrder(Room room, User user, Date dateFrom, Date dateTo){
+    public Order createOrder(Room room, User user, Date dateFrom, Date dateTo) {
 
         Order order = new Order(user, room, dateFrom, dateTo, room.getPrice());
         Session session = null;
         Transaction tr = null;
 
-        try{
+        try {
 
             session = createSessionFactory().openSession();
             tr = session.getTransaction();
@@ -231,18 +226,48 @@ public class RoomDAO extends DAO<Room> {
             return order;
 
 
-        }catch(HibernateException e){
+        } catch (HibernateException e) {
             System.err.println("ERROR");
             e.printStackTrace();
-            tr.rollback();
+            if (tr != null) tr.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+
+        return null;
+    }
+
+    private void cancelReservation(long roomId, long userId){
+
+        Session session = null;
+        Transaction tr = null;
+        Room room;
+        User user;
+
+        try{
+
+            session = createSessionFactory().openSession();
+            tr = session.getTransaction();
+            tr.begin();
+
+            room = session.get(Room.class, roomId);
+            user = session.get(User.class, userId);
+
+            //TODO
+            //присвоить dateAvailableFrom начальное значение
+
+            tr.commit();
+
+        } catch(HibernateException e){
+            System.err.println("ERROR");
+            e.printStackTrace();
+            if (tr != null) tr.rollback();
         } finally {
             if (session != null) session.close();
         }
 
 
-
-
-
-        return null;
     }
+
+
 }

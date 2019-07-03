@@ -3,10 +3,7 @@ package hibernate.lesson4;
 import hibernate.lesson4.DAO.HotelDAO;
 import hibernate.lesson4.DAO.RoomDAO;
 import hibernate.lesson4.DAO.UserDAO;
-import hibernate.lesson4.model.Hotel;
-import hibernate.lesson4.model.Room;
-import hibernate.lesson4.model.User;
-import hibernate.lesson4.model.UserType;
+import hibernate.lesson4.model.*;
 import hibernate.lesson4.service.HotelService;
 
 import java.text.ParseException;
@@ -57,7 +54,7 @@ public class Demo {
 
 
 
-        userDAO.delete(51);
+        userDAO.login("Bill", "121");
 
 
 
