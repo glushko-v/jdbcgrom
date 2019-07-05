@@ -38,7 +38,7 @@ public class Order {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_USER")
+    @JoinColumn(name = "USER_ID")
     public User getUserOrdered() {
         return userOrdered;
     }

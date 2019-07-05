@@ -13,8 +13,9 @@ import java.util.List;
 
 public class RoomDAO extends DAO<Room> {
 
+
     @Override
-    SessionFactory createSessionFactory() {
+    public SessionFactory createSessionFactory() {
         return super.createSessionFactory();
     }
 
@@ -26,12 +27,12 @@ public class RoomDAO extends DAO<Room> {
     @Override
     public void delete(long id) {
 
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
@@ -53,8 +54,6 @@ public class RoomDAO extends DAO<Room> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
     }
@@ -62,12 +61,12 @@ public class RoomDAO extends DAO<Room> {
     @Override
     public Room findById(long id) {
 
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
@@ -88,8 +87,6 @@ public class RoomDAO extends DAO<Room> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
 
@@ -98,12 +95,12 @@ public class RoomDAO extends DAO<Room> {
 
     @Override
     public Room update(Room room, long id) {
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
@@ -132,8 +129,6 @@ public class RoomDAO extends DAO<Room> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
 
@@ -142,14 +137,14 @@ public class RoomDAO extends DAO<Room> {
 
 
     public List<Room> findRooms(Filter filter) {
-        Session session = null;
+
         Transaction tr = null;
         List<Room> rooms;
 
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
             tr.begin();
 
@@ -172,8 +167,6 @@ public class RoomDAO extends DAO<Room> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
 
@@ -209,12 +202,12 @@ public class RoomDAO extends DAO<Room> {
     public Order createOrder(Room room, User user, Date dateFrom, Date dateTo) {
 
         Order order = new Order(user, room, dateFrom, dateTo, room.getPrice());
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
             tr.begin();
 
@@ -230,40 +223,44 @@ public class RoomDAO extends DAO<Room> {
             System.err.println("ERROR");
             e.printStackTrace();
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
         return null;
     }
 
-    private void cancelReservation(long roomId, long userId){
+    private void cancelReservation(long roomId, long userId) {
 
-        Session session = null;
+
         Transaction tr = null;
         Room room;
-        User user;
+        Order order;
+        List<Order> orders;
 
-        try{
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
             tr.begin();
 
-            room = session.get(Room.class, roomId);
-            user = session.get(User.class, userId);
 
-            //TODO
-            //присвоить dateAvailableFrom начальное значение
+            Query query = session.createSQLQuery("SELECT * FROM ORDER1 WHERE USER_ID = ?, ROOM_ID = ?").addEntity(Order.class);
+            query.setParameter(1, userId);
+            query.setParameter(2, roomId);
+            orders = query.getResultList();
+            order = orders.get(0);
+            room = findById(roomId);
+
+
+            room.setDateAvailableFrom(order.getDateFrom());
+            RoomSession.cancelReservation(order.getRoom());
+
 
             tr.commit();
 
-        } catch(HibernateException e){
+        } catch (HibernateException e) {
             System.err.println("ERROR");
             e.printStackTrace();
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
 

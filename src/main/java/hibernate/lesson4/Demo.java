@@ -54,14 +54,6 @@ public class Demo {
 
 
 
-        userDAO.login("Bill", "121");
-
-
-
-
-
-
-
 
 
 //        roomDAO.save(room1);

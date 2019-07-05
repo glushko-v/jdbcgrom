@@ -14,7 +14,7 @@ public class HotelDAO extends DAO<Hotel> {
 
 
     @Override
-    SessionFactory createSessionFactory() {
+    public SessionFactory createSessionFactory() {
         return super.createSessionFactory();
     }
 
@@ -23,26 +23,16 @@ public class HotelDAO extends DAO<Hotel> {
         return super.save(hotel);
     }
 
-//    @Override
-//    public void delete(long id) {
-//        super.delete(id);
-//    }
-//
-//    @Override
-//    public void update(long id) {
-//        super.update(id);
-//    }
-
 
     @Override
     public Hotel findById(long id) {
 
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
@@ -63,8 +53,6 @@ public class HotelDAO extends DAO<Hotel> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
         return null;
@@ -73,12 +61,12 @@ public class HotelDAO extends DAO<Hotel> {
 
     @Override
     public void delete(long id) {
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
@@ -101,8 +89,6 @@ public class HotelDAO extends DAO<Hotel> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
     }
 
@@ -110,12 +96,12 @@ public class HotelDAO extends DAO<Hotel> {
     @Override
     public Hotel update(Hotel hotel, long id) {
 
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
@@ -141,8 +127,6 @@ public class HotelDAO extends DAO<Hotel> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
 
@@ -153,13 +137,13 @@ public class HotelDAO extends DAO<Hotel> {
 
     public List<Hotel> findHotelByName(String name) {
 
-        Session session = null;
+
         Transaction tr = null;
         List<Hotel> hotels;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
@@ -177,8 +161,6 @@ public class HotelDAO extends DAO<Hotel> {
             System.err.println("ERROR");
             e.printStackTrace();
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
 
@@ -186,15 +168,15 @@ public class HotelDAO extends DAO<Hotel> {
     }
 
 
-    public List<Hotel> findHotelByCity(String city){
+    public List<Hotel> findHotelByCity(String city) {
 
-        Session session = null;
+
         Transaction tr = null;
         List<Hotel> hotels;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
@@ -212,10 +194,7 @@ public class HotelDAO extends DAO<Hotel> {
             System.err.println("ERROR");
             e.printStackTrace();
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
-
 
 
         return null;

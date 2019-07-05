@@ -32,12 +32,12 @@ public class HotelService {
     private boolean isHotelExists(Hotel hotel) {
 
 
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try(Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
@@ -59,8 +59,6 @@ public class HotelService {
             System.err.println("ERROR");
             e.printStackTrace();
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
         return false;

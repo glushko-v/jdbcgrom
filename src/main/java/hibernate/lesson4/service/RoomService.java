@@ -1,12 +1,15 @@
 package hibernate.lesson4.service;
 
+import hibernate.lesson4.DAO.DAO;
 import hibernate.lesson4.DAO.RoomDAO;
 import hibernate.lesson4.DAO.UserDAO;
+import hibernate.lesson4.model.Room;
 import hibernate.lesson4.model.User;
+import org.hibernate.SessionFactory;
 
 import java.util.Date;
 
-public class RoomService {
+public class RoomService extends DAO<Room> {
     //1. проверка даты доступности
     //2. проверка isBooked
 
@@ -20,9 +23,37 @@ public class RoomService {
         //2. залогинен ли юзер++
 
 
-//        if (userDAO.findById(userId).isRegistered() && userDAO.findById(userId).isLoggedIn())
-//            roomDAO.bookRoom(roomId, userId, dateFrom, dateTo);
 
 
+    }
+
+    //TODO
+
+
+    @Override
+    public SessionFactory createSessionFactory() {
+        return super.createSessionFactory();
+    }
+
+    @Override
+    public Room save(Room room) {
+        return super.save(room);
+    }
+
+    @Override
+    public void delete(long id) {
+
+        roomDAO.delete(id);
+
+    }
+
+    @Override
+    public Room findById(long id) {
+        return null;
+    }
+
+    @Override
+    public Room update(Room room, long id) {
+        return null;
     }
 }

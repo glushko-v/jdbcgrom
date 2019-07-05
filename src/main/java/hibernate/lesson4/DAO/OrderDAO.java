@@ -11,7 +11,7 @@ import javax.persistence.Query;
 public class OrderDAO extends DAO<Order> {
 
     @Override
-    SessionFactory createSessionFactory() {
+    public SessionFactory createSessionFactory() {
         return super.createSessionFactory();
     }
 
@@ -23,12 +23,12 @@ public class OrderDAO extends DAO<Order> {
     @Override
     public void delete(long id) {
 
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
@@ -49,8 +49,6 @@ public class OrderDAO extends DAO<Order> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
     }
@@ -58,12 +56,12 @@ public class OrderDAO extends DAO<Order> {
     @Override
     public Order findById(long id) {
 
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
@@ -84,8 +82,6 @@ public class OrderDAO extends DAO<Order> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
         return null;
@@ -94,18 +90,18 @@ public class OrderDAO extends DAO<Order> {
     @Override
     public Order update(Order order, long id) {
 
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
 
 //            Order order = session.get(Order.class, id);
-            session.update(order);
+            if (order != null) session.update(order);
 
             tr.commit();
 
@@ -116,8 +112,6 @@ public class OrderDAO extends DAO<Order> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null)session.close();
         }
 
         return null;

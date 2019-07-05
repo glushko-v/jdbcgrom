@@ -1,14 +1,19 @@
 package hibernate.lesson4.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RoomSession {
+
     static List<Room> bookedRooms = new ArrayList<>();
+
+
 
     public static void bookRoom(Room room) {
 
         if (room != null & !isBooked(room)) bookedRooms.add(room);
+
 
     }
 
@@ -26,5 +31,8 @@ public class RoomSession {
         if (room != null && isBooked(room)) bookedRooms.remove(room);
 
     }
+
+
+
 
 }

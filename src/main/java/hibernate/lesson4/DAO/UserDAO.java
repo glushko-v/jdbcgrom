@@ -14,7 +14,7 @@ import java.util.List;
 public class UserDAO extends DAO<User> {
 
     @Override
-    SessionFactory createSessionFactory() {
+    public SessionFactory createSessionFactory() {
         return super.createSessionFactory();
     }
 
@@ -26,12 +26,12 @@ public class UserDAO extends DAO<User> {
     @Override
     public void delete(long id) {
 
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
             tr.begin();
 
@@ -51,8 +51,6 @@ public class UserDAO extends DAO<User> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
     }
@@ -60,12 +58,12 @@ public class UserDAO extends DAO<User> {
     @Override
     public User findById(long id) {
 
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
@@ -86,8 +84,6 @@ public class UserDAO extends DAO<User> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
         return null;
@@ -95,17 +91,16 @@ public class UserDAO extends DAO<User> {
 
     @Override
     public User update(User user, long id) {
-        Session session = null;
+
         Transaction tr = null;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
 
             tr.begin();
 
-//            User user = session.get(User.class, id);
             session.update(user);
 
             tr.commit();
@@ -117,8 +112,6 @@ public class UserDAO extends DAO<User> {
             System.err.println("ERROR");
             System.err.println(e.getMessage());
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
 
@@ -127,64 +120,23 @@ public class UserDAO extends DAO<User> {
 
     public void registerUser(User user) throws Exception {
 
-        if (checkUserName(user.getUserName()))
-            throw new Exception("Sorry user with name " + user.getUserName() + " already exists");
-        else {
 
-            UserSession.registerUser(user);
-            save(user);
+        UserSession.registerUser(user);
+        save(user);
 
-        }
+
     }
 
-    private boolean checkUserName(String userName) {
-
-        Session session = null;
-        Transaction tr = null;
-        List<String> names;
-
-        try {
-
-            session = createSessionFactory().openSession();
-            tr = session.getTransaction();
-            tr.begin();
-
-
-            Query query = session.createSQLQuery("SELECT * FROM USER1 WHERE USER_NAME = ?").addEntity(User.class);
-            query.setParameter(1, userName);
-
-            names = query.getResultList();
-            int res = names.size();
-
-
-            tr.commit();
-
-            return (res != 0);
-
-
-        } catch (HibernateException e) {
-            System.err.println("ERROR");
-            e.printStackTrace();
-            if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
-        }
-
-
-        return true;
-
-    }
 
     public void login(String userName, String password) throws Exception {
 
-        Session session = null;
         Transaction tr = null;
         List<User> users;
         User user;
 
-        try {
+        try (Session session = createSessionFactory().openSession()) {
 
-            session = createSessionFactory().openSession();
+
             tr = session.getTransaction();
             tr.begin();
 
@@ -206,15 +158,13 @@ public class UserDAO extends DAO<User> {
             System.err.println("ERROR");
             e.printStackTrace();
             if (tr != null) tr.rollback();
-        } finally {
-            if (session != null) session.close();
         }
 
     }
 
     public void logOut(User user) {
 
-        UserSession.logOut(user);
+        if (user != null) UserSession.logOut(user);
 
     }
 
