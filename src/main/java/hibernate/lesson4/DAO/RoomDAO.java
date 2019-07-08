@@ -176,14 +176,6 @@ public class RoomDAO extends DAO<Room> {
     public void bookRoom(long roomId, long userId, Date dateFrom, Date dateTo) {
         UserDAO ud = new UserDAO();
 
-        //Комната считается забронированной, если isBooked - true + обновлена dateAvailableFrom
-        //1. получаем из базы комнату по findById +++
-        //2. получаем из базы dateAvailableFrom ++
-        //3. сравниваем dateAvailableFrom и dateFrom++
-        //4. если dateAvailableFrom <= dateFrom --> isBooked = true, setDateAvailableFrom = dateTo +++
-        //5. получаем из базы юзера по findById +++
-        //6. проверяем залогинен и зареган ли?+++
-        //7. создаем новый ордер и передаем его в БД++
 
         Room room = findById(roomId);
         User user = ud.findById(userId);
@@ -228,7 +220,7 @@ public class RoomDAO extends DAO<Room> {
         return null;
     }
 
-    private void cancelReservation(long roomId, long userId) {
+    public void cancelReservation(long roomId, long userId) {
 
 
         Transaction tr = null;
